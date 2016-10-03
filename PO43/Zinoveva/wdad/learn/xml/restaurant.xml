@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE restaurant SYSTEM "restaurant.dtd">
 <restaurant>
-    <date day="21" month="09" year="2016">
+    <date day="21" month="9" year="2016">
         <order>
             <officiant firstname="Аркадий" secondname="petrov"/>
             <item cost="240" name="Макароны по-флотски"/>
@@ -13,7 +13,7 @@
             <totalcost>250</totalcost>
         </order>
     </date>
-    <date day="22" month="8" year="2016">
+    <date day="22" month="9" year="2016">
         <order>
             <officiant firstname="Аркадий" secondname="petrov"/>
             <item cost="490" name="Куриные крылышки"/>
@@ -26,7 +26,7 @@
             <totalcost>750</totalcost>
         </order>
     </date>
-    <date day="23" month="09" year="2016">
+    <date day="23" month="9" year="2016">
         <order>
             <officiant firstname="Василий" secondname="ivanov"/>
             <item cost="180" name="Тушеный картофель"/>

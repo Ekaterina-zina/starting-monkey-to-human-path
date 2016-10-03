@@ -79,7 +79,7 @@ public class XmlTask {
         boolean isOfficiantFounded = false;
         for (int i = 0; i < dateList.getLength(); i++) {
             if ((Integer.valueOf(dateList.item(i).getAttributes().item(0).getNodeValue()) == date.get(Calendar.DAY_OF_MONTH)) &&
-                    (Integer.valueOf(dateList.item(i).getAttributes().item(1).getNodeValue()) == date.get(Calendar.MONTH)) &&
+                    (Integer.valueOf(dateList.item(i).getAttributes().item(1).getNodeValue()) == (date.get(Calendar.MONTH))+1) &&
                     (Integer.valueOf(dateList.item(i).getAttributes().item(2).getNodeValue()) == date.get(Calendar.YEAR))) {
                 orderList = dateList.item(i).getChildNodes();
                 for (int j = 0; j < orderList.getLength(); j++) {
