@@ -19,7 +19,7 @@ import java.util.Calendar;
 public class XmlTask {
 
     private Document doc;
-    private String path = "src/PO43/Zinoveva/wdad/learn/xml/first.xml";
+    private String path = "src/PO43/Zinoveva/wdad/learn/xml/restaurant.xml";
 
     public XmlTask() throws IOException, ParserConfigurationException, SAXException {
         makeDoc();
