@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE restaurant SYSTEM "restaurant.dtd">
+<restaurant>
+    <date day="21" month="09" year="2016">
+        <order>
+            <officiant firstname="Аркадий" secondname="petrov"/>
+            <item cost="240" name="Макароны по-флотски"/>
+            <totalcost>240</totalcost>
+        </order>
+        <order>
+            <officiant firstname="Василий" secondname="ivanov"/>
+            <item cost="250" name="Борщ"/>
+            <totalcost>250</totalcost>
+        </order>
+    </date>
+    <date day="22" month="8" year="2016">
+        <order>
+            <officiant firstname="Аркадий" secondname="petrov"/>
+            <item cost="490" name="Куриные крылышки"/>
+            <totalcost>490</totalcost>
+        </order>
+        <order>
+            <officiant firstname="Василий" secondname="ivanov"/>
+            <item cost="530" name="Тефтели, с гарниром"/>
+            <item cost="220" name="Кофе"/>
+            <totalcost>750</totalcost>
+        </order>
+    </date>
+    <date day="23" month="09" year="2016">
+        <order>
+            <officiant firstname="Василий" secondname="ivanov"/>
+            <item cost="180" name="Тушеный картофель"/>
+            <totalcost>180</totalcost>
+        </order>
+        <order>
+            <officiant firstname="Аркадий" secondname="petrov"/>
+            <item cost="250" name="Пицца"/>
+            <totalcost>250</totalcost>
+        </order>
+    </date>
+</restaurant>
