@@ -20,6 +20,11 @@ public class XmlTask {
 
     private Document doc;
     private String path = "src/PO43/Zinoveva/wdad/learn/xml/restaurant.xml";
+    private static final String YEAR_ATTRIBUTE_NAME = "year";
+    private static final String MONTH_ATTRIBUTE_NAME = "month";
+    private static final String DAY_ATTRIBUTE_NAME = "day";
+    private static final String OFFICIANT_FIRST_NAME = "firstname";
+    private static final String OFFICIANT_SECOND_NAME = "secondname";
 
     public XmlTask() throws IOException, ParserConfigurationException, SAXException {
         makeDoc();
@@ -59,7 +64,7 @@ public class XmlTask {
                 //сразу приравниваем реальный totalCost, вместо того, что было изначально, и меняем boolean переменную, сообщая, что totalCost имеется
                 totalCostList.item(0).setTextContent(String.valueOf(totalCost));
                 isTotalCostExist = true;
-                updateDoc();
+                writeDoc();
             }
             if (!isTotalCostExist) {
                 //если boolean переменная все еще false, значит тега totalCost нет, создаем такой элемент и присваеваем ему значение
@@ -67,7 +72,7 @@ public class XmlTask {
                 totalCostElement.setTextContent(String.valueOf(totalCost));
                 //затем "присоединяем" новообразованный дочерний элемент к текущему ордеру и обновляем xml документ
                 orderList.item(i).appendChild(totalCostElement);
-                updateDoc();
+                writeDoc();
             }
         }
     }
@@ -149,7 +154,7 @@ public class XmlTask {
                 datesAmount--;
             }
         }
-        updateDoc();
+        writeDoc();
     }
 
     //Изменяем имя официанта
@@ -167,6 +172,6 @@ public class XmlTask {
                 officiantAttributes.getNamedItem(OFFICIANT_SECOND_NAME).setNodeValue(newSecondName);
             }
         }
-        updateDoc();
+        writeDoc();
     }
 }
