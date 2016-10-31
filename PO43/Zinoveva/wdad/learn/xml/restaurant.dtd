@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!ELEMENT restaurant (date*)>
+        <!ELEMENT date (order*)>
+        <!ELEMENT order (officiant?, item*, totalcost?)>
+        <!ELEMENT officiant EMPTY>
+        <!ELEMENT item EMPTY>
+        <!ELEMENT totalcost (#PCDATA)>
+
+        <!ATTLIST date
+                day CDATA #REQUIRED
+                month CDATA #REQUIRED
+                year CDATA #REQUIRED>
+        <!ATTLIST officiant
+                firstname CDATA #IMPLIED
+                secondname (petrov|ivanov|sidorov) #REQUIRED >
+        <!ATTLIST item
+                name CDATA #REQUIRED
+                cost CDATA #REQUIRED>
