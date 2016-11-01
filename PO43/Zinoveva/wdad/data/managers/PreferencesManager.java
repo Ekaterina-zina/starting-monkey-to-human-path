@@ -31,6 +31,8 @@ public class PreferencesManager {
         return instance;
     }
 
+    //Выстраиваем путь от указанной ноды, непрерывно получая родителя, до тех пор пока он не станет null
+    // или #document, что равно окончанию иерархии документа
     private static String getXPath(Node node) {
         Node parent = node.getParentNode();
         if (parent == null || parent.getNodeName().equals("#document")) {
@@ -39,7 +41,10 @@ public class PreferencesManager {
         return getXPath(parent) + '.' + node.getNodeName();
     }
 
+    //Устанавливаем значение параметра в appconfig по ключу
     public void setProperty(String key, String value) throws IOException, XPathExpressionException {
+        //Заменяем в ключе все точки на слэши, а затем отдаем полученную строчку в xPath,
+        //чтобы получить ссылку на ноду по указанному нами пути в иерархии и устанавливаем её значение
         String xPathKey = "/" + key.replace('.', '/');
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
@@ -49,6 +54,8 @@ public class PreferencesManager {
     }
 
     public String getProperty(String key) throws XPathExpressionException {
+        //Заменяем в ключе все точки на слэши, а затем отдаем полученную строчку в xPath,
+        //чтобы получить ссылку на ноду по указанному нами пути в иерархии и получаем её значение
         String xPathKey = "/" + key.replace('.', '/');
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
@@ -58,6 +65,9 @@ public class PreferencesManager {
 
 
     public Properties getProperties() throws XPathExpressionException {
+        //Через заданное нами значение "//*[not(*)]" получаем все ноды, которые не имеют потомков, а затем,
+        //от них, выстраиваем путь вверх по иерархии, чем получаем значение ключа,
+        //затем получаем значение самой ноды и заносим это в экземпляр класса Properties
         Properties properties = new Properties();
         String key, value;
         XPath xPath = XPathFactory.newInstance().newXPath();
@@ -73,6 +83,7 @@ public class PreferencesManager {
 
 
     public void setProperties(Properties prop) throws IOException, XPathExpressionException {
+        //Выполняем для каждой пары ключ-значение метод setProperty
         for (String key : prop.stringPropertyNames()
                 ) {
             setProperty(key, prop.getProperty(key));
@@ -80,6 +91,7 @@ public class PreferencesManager {
     }
 
     public void addBindedObject(String name, String className) throws IOException, XPathExpressionException {
+        //Проверяем наличие ноды с необходимым именем, если его не существует, то создаем новый элемент с указанными параметрами
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
         String key = "/appconfig/rmi/server/bindedobject[@name='" + name + "']";
@@ -95,6 +107,8 @@ public class PreferencesManager {
     }
 
     public void removeBindedObject(String name) throws IOException, XPathExpressionException {
+        //Получаем объект с указанным именем, и вызываем у его родительского элемента метод,
+        //удаляющий полученный нами объект
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
         String key = "/appconfig/rmi/server/bindedobject[@name='" + name + "']";
