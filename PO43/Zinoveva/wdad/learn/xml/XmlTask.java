@@ -7,6 +7,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
+import PO43.Zinoveva.wdad.learn.rmi.*;
 import org.w3c.dom.*;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
@@ -14,7 +15,13 @@ import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.SAXException;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class XmlTask {
 
@@ -27,6 +34,11 @@ public class XmlTask {
     private static final String OFFICIANT_SECOND_NAME = "secondname";
 
     public XmlTask() throws IOException, ParserConfigurationException, SAXException {
+        makeDoc();
+    }
+
+    public XmlTask(String p) throws IOException, ParserConfigurationException, SAXException {
+        path = p;
         makeDoc();
     }
 
@@ -173,5 +185,83 @@ public class XmlTask {
             }
         }
         writeDoc();
+    }
+
+    public List<Order> getOrders(Calendar date) {
+        //Предварительно создаем список для занесения туда заказов
+        List<Order> result = new LinkedList<>();
+        //Получаем все элементы дат из документа
+        NodeList dateList = doc.getElementsByTagName("date");
+        //Получаем общее количество полученных дат
+        int datesAmount = dateList.getLength();
+        //Заранее создаем экземпляр для хранения атрибутов дат, чтобы к атрибутам непосредственно через указание элемента
+        NamedNodeMap dateAttributes;
+        for (int i = 0; i < datesAmount; i++) {
+            dateAttributes = dateList.item(i).getAttributes();
+            //Сравниванием введенную дату, с текущей датой из документа
+            if ((Integer.valueOf(dateAttributes.getNamedItem(DAY_ATTRIBUTE_NAME).getNodeValue()) == date.get(Calendar.DAY_OF_MONTH)) &&
+                    (Integer.valueOf(dateAttributes.getNamedItem(MONTH_ATTRIBUTE_NAME).getNodeValue()) == (date.get(Calendar.MONTH) + 1)) &&
+                    (Integer.valueOf(dateAttributes.getNamedItem(YEAR_ATTRIBUTE_NAME).getNodeValue()) == date.get(Calendar.YEAR))) {
+                //Как только находим необходимую нам дату, получаем все элементы заказов из нее и передаем их по очередности в отдельный метод,
+                //который возвращает нам экземпляры класса Order для последующего занесения их в список
+                NodeList orders = ((Element) dateList.item(i)).getElementsByTagName("order");
+                for (int j = 0; j < orders.getLength(); j++){
+                    result.add(getOrder(orders.item(j).getChildNodes()));
+                }
+            }
+        }
+        return result;
+    }
+
+    private Order getOrder(NodeList orderNodes){
+        Order order;
+        Officiant currentOfficiant;
+        NamedNodeMap attributes;
+        //Получаем аттрибуты текущего официанта
+        attributes = ((Element) orderNodes).getElementsByTagName("officiant").item(0).getAttributes();
+        //Создаем экземпляр класса официанта с получением данных из аттрибутов элементов
+        currentOfficiant = new Officiant(attributes.getNamedItem("firstname").getNodeValue(), attributes.getNamedItem("secondname").getNodeValue());
+        //Создаем пустой экземпляр Order с  указанием текущего официанта
+        order = new Order(currentOfficiant);
+        //Получаем список блюд заказа
+        NodeList itemsList = ((Element) orderNodes).getElementsByTagName("item");
+        for (int i = 0; i < itemsList.getLength(); i++){
+            attributes = itemsList.item(i).getAttributes();
+            //поочередно добавляем каждое из них в текущий экземпляр класса Order
+            order.add(new Item(attributes.getNamedItem("name").getNodeValue(), Integer.valueOf(attributes.getNamedItem("cost").getNodeValue())));
+        }
+        return order;
+    }
+
+    //Получаем дату последнего выполненного официантом заказа
+    public Date lastOfficiantWorkDate(Officiant officiant) throws ParseException, NoSuchOfficiantException {
+        //получаем список всех элементов-дат
+        NodeList dateList = doc.getElementsByTagName("date");
+        NamedNodeMap currentDateAttributes;
+        NamedNodeMap officiantAttributes;
+        //Так как нам необходимо последняя дата, а они расположены в XML документе в хронологическом порядке, то идем с конца списка дат
+        for (int i = dateList.getLength()-1; i > 0; i--){
+            //Получаем список официантов из текущей даты
+            NodeList officiantNodes = ((Element) dateList.item(i)).getElementsByTagName("officiant");
+            for (int j = 0; j < officiantNodes.getLength(); j++){
+                //Получаем аттрибуты текущего официанта и проверяем, совпадают ли они с нужными
+                officiantAttributes = officiantNodes.item(j).getAttributes();
+                if((officiantAttributes.getNamedItem("firstname").getNodeValue().equals(officiant.getFirstName())) &&
+                        officiantAttributes.getNamedItem("secondname").getNodeValue().equals(officiant.getSecondName())){
+                    //Если мы встречаем нужного официанта, то получаем аттрибуты текущей даты
+                    currentDateAttributes = dateList.item(i).getAttributes();
+                    //Задаем формат представления этой даты
+                    DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                    //Затем формируем строку из аттрибутов элемента даты в указанном нами формате
+                    String dateString = currentDateAttributes.getNamedItem("month").getNodeValue() + "/"
+                            + currentDateAttributes.getNamedItem("day").getNodeValue() + "/"
+                            + currentDateAttributes.getNamedItem("year").getNodeValue();
+                    //И возвращаем результат преобразования строки в Дату
+                    return formatter.parse(dateString);
+                }
+            }
+        }
+        //Если мы прошли весь цикл и не встретили официанта, то выбрасываем исключение
+        throw new NoSuchOfficiantException(officiant);
     }
 }
