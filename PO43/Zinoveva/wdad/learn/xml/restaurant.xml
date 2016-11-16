@@ -8,7 +8,7 @@
             <totalcost>240</totalcost>
         </order>
         <order>
-            <officiant firstname="Василий" secondname="ivanov"/>
+            <officiant firstname="Артем" secondname="sidorov"/>
             <item cost="250" name="Борщ"/>
             <totalcost>250</totalcost>
         </order>
@@ -20,7 +20,7 @@
             <totalcost>490</totalcost>
         </order>
         <order>
-            <officiant firstname="Василий" secondname="ivanov"/>
+            <officiant firstname="Артем" secondname="sidorov"/>
             <item cost="530" name="Тефтели, с гарниром"/>
             <item cost="220" name="Кофе"/>
             <totalcost>750</totalcost>
@@ -28,7 +28,7 @@
     </date>
     <date day="23" month="9" year="2016">
         <order>
-            <officiant firstname="Василий" secondname="ivanov"/>
+            <officiant firstname="Артем" secondname="sidorov"/>
             <item cost="180" name="Тушеный картофель"/>
             <totalcost>180</totalcost>
         </order>
